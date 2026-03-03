@@ -200,6 +200,13 @@ footer {
     .titulo-calculadora {
         white-space: normal; 
     }
+    header {
+        padding: 15px;
+    }
 
+    header h1 {
+        font-size: 22px !important;
+        letter-spacing: 1px;
+    }
 
 }
