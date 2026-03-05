@@ -1,0 +1,26 @@
+body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 20vh;
+    margin: 0;
+    gap: 50px; 
+}
+
+h1 { 
+    color: #8f4bfc; 
+    margin: 0; 
+    font-size: 70px;
+}
+.enlace {
+    display: flex;
+    flex-direction: column; 
+    gap: 15px;
+    width: 100%;
+    max-width: 500px;
+    align-items: center;
+    text-decoration: none;
+    color: #5d4fdb;           
+    font-size: 20px;
+}
