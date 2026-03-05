@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZenMacros</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+    <h1>ZenMacros</h1>
+    <div class="user-profile">
+        <span>👤 Mi Perfil</span>
+    </div>
+</header>
+
+<div class="app-layout">
+    <aside>
+        <h3 style="font-size: 1.1rem; margin-bottom: 15px; color: var(--lila-fuerte);">¡Sigue tu camino Zen!</h3>        
+        <ul class="menu-sin-puntos">
+            <li>Historial</li>
+            <li>Calculadora</li>
+            <li>Cuenta</li>
+        </ul>
+    </aside>
+
+    <main>
+        <h2>¿Por qué deberías elegirnos?</h2>
+        <section class="tarjetas-container">
+            <article>
+                <div class="icono">⚡</div>
+                <h3>Precisión</h3>
+                <p>Introduce tus datos biométricos para obtener un cálculo exacto de tus necesidades diarias.</p>
+            </article>
+            <article>
+                <div class="icono">🧠</div>
+                <h3>Ciencia Zen</h3>
+                <p>Usamos fórmulas de gasto metabólico basal para asegurar que tus macros estén en equilibrio.</p>
+            </article>
+            <article>
+                <div class="icono">📈</div>
+                <h3>Progreso</h3>
+                <p>Calcula tu déficit o superávit calórico según tu nivel de actividad física diaria.</p>
+            </article>
+        </section>
+
+        <section class="calculadora-container">
+            <form class="calculadora-form">
+                <h2 class="titulo-calculadora">Calcula tus calorías 🔥</h2>
+                <div class="input-group">
+                    <label>Edad</label>
+                    <input type="number" id="edad" placeholder="Ej: 25">
+                </div>
+                <div class="input-group">
+                    <label>Peso (kg)</label>
+                    <input type="number" id="peso" placeholder="Ej: 75">
+                </div>
+                <div class="input-group">
+                    <label>Altura (cm)</label>
+                    <input type="number" id="altura" placeholder="Ej: 185">
+                </div>
+                <div class="input-group">
+                    <label>Género</label>
+                    <select id="genero">
+                        <option value="hombre">Hombre</option>
+                        <option value="mujer">Mujer</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label>Nivel de actividad</label>
+                    <select id="actividad">
+                        <option value="1.2">Sedentario (Sin ejercicio)</option>
+                        <option value="1.375">Ligero (1-3 días/semana)</option>
+                        <option value="1.55">Moderado (3-5 días/semana)</option>
+                    </select>
+                </div>
+                <button type="button" id="btn-calcular">Calcular</button>
+            </form>
+        </section>
+        <div id="lista-resultados"></div>
+    </main>
+</div>
+
+<footer>
+    <p>&copy; 2026 ZenMacros - Todos los derechos reservados.</p>
+</footer>
+<script src="app.js"></script>
+</body>
+</html>
