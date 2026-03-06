@@ -1,4 +1,3 @@
-# taskflow-project
 # Ejercicio 3: Calculadora Avanzada
 
 Segunda fase del proyecto TaskFlow. Se ha migrado el diseño a Tailwind CSS y se han añadido funciones de persistencia de datos.
@@ -14,3 +13,5 @@ Segunda fase del proyecto TaskFlow. Se ha migrado el diseño a Tailwind CSS y se
 - index.html: Estructura y clases de Tailwind.
 - style.css: Estilos personalizados necesarios para el diseño.
 - app.js: Lógica de la calculadora y manejo de datos.
+- tailwind.config.js: Configuración del framework y modo oscuro por clase.
+- package.json: Gestión de dependencias del proyecto
