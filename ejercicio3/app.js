@@ -2,7 +2,7 @@
 
 /**
  * Arreglo para almacenar el historial de cálculos de calorías.
- * @type {Array<{id: number, calorias: number, nombrePerfil?: string}>}
+ * @type {Array<{id: number, calorias: number, nombrePerfil?: string, diferenciaRespectoAnterior?: number}>}
  */
 let historialCalorias = [];
 
@@ -72,16 +72,32 @@ function calcularCaloriasMantenimiento(tmb, factorActividad) {
 
 /**
  * Renderiza una tarjeta de resultados en el DOM y añade los listeners para eliminación.
- * @param {{id: number, calorias: number, nombrePerfil?: string}} registro 
+ * @param {{id: number, calorias: number, nombrePerfil?: string, diferenciaRespectoAnterior?: number}} registro 
  */
 function renderizarTarjetaResultado(registro) {
     const tarjeta = document.createElement("div");
 
-    tarjeta.className = "flex justify-between items-center p-4 my-2 rounded-xl bg-white dark:bg-slate-800 border dark:border-slate-700 shadow-sm transition-all";
+    tarjeta.className = "flex justify-between items-center gap-4 p-4 my-2 rounded-xl bg-white dark:bg-slate-800 border dark:border-slate-700 shadow-sm transition-all";
+
+    let textoDiferencia = "—";
+    if (typeof registro.diferenciaRespectoAnterior === "number") {
+        if (registro.diferenciaRespectoAnterior > 0) {
+            textoDiferencia = `+${registro.diferenciaRespectoAnterior} kcal`;
+        } else if (registro.diferenciaRespectoAnterior < 0) {
+            textoDiferencia = `${registro.diferenciaRespectoAnterior} kcal`;
+        } else {
+            textoDiferencia = "0 kcal";
+        }
+    }
+
     tarjeta.innerHTML = `
-        <div class="dark:text-white font-bold flex flex-col">
+        <div class="flex-1 dark:text-white font-bold flex flex-col">
             <span>🔥 <span>${registro.calorias}</span> kcal</span>
             ${registro.nombrePerfil ? `<span class="mt-1 text-xs font-normal text-slate-500 dark:text-slate-300">👤 ${registro.nombrePerfil}</span>` : ""}
+        </div>
+        <div class="w-32 text-xs text-right text-slate-600 dark:text-slate-300">
+            <span class="font-semibold">↕ ${textoDiferencia}</span><br>
+            <span class="text-[0.7rem]">vs. último registro</span>
         </div>
         <button class="btn-borrar bg-red-500 hover:bg-red-600 text-white px-3 py-1.5 rounded-lg transition-colors text-xs font-bold uppercase">
             Eliminar
@@ -143,10 +159,16 @@ botonCalcular.addEventListener("click", function () {
     const tmb = calcularTMB(edad, peso, altura, genero);
     const caloriasMantenimiento = calcularCaloriasMantenimiento(tmb, factorActividad);
 
+    const ultimoRegistro = historialCalorias[historialCalorias.length - 1] || null;
+    const diferenciaRespectoAnterior = ultimoRegistro
+        ? caloriasMantenimiento - ultimoRegistro.calorias
+        : null;
+
     const nuevoRegistro = {
         id: Date.now(),
         calorias: caloriasMantenimiento,
-        nombrePerfil: nombrePerfilValor
+        nombrePerfil: nombrePerfilValor,
+        diferenciaRespectoAnterior
     };
 
     historialCalorias.push(nuevoRegistro);
