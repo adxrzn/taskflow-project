@@ -1,31 +1,15 @@
-# Reflexión Final: El Impacto de la IA en el Desarrollo (Paso 10)
+# Mi reflexión sobre el uso de la IA en ZenMacros
 
-## Introducción
-Tras completar los 9 pasos del proyecto TaskFlow (ZenMacros), esta reflexión analiza cómo la inteligencia artificial, específicamente a través de Cursor y modelos de lenguaje avanzados, ha transformado mi flujo de trabajo. La IA no solo ha sido un autocompletado de código, sino un colaborador activo en la arquitectura y documentación.
+Sinceramente, usar Cursor para este proyecto ha sido un cambio total. Lo que más me ha ayudado ha sido no tener que escribir a mano cada tabla o cada formulario; la IA te hace el "trabajo sucio" rápido y te permite centrarte en que la calculadora funcione bien.
 
-## 🚀 Tareas donde la IA ha sido más útil
-La IA ha brillado especialmente en tres áreas críticas:
-1. **Bootstrap de funcionalidades:** La creación de estructuras repetitivas (como la tabla de historial y los formularios) se redujo de minutos a segundos.
-2. **Refactorización y Limpieza:** La capacidad de la IA para aplicar patrones como JSDoc o convertir funciones anidadas en código modular es excepcional.
-3. **Resolución de problemas específicos:** Para tareas como la persistencia en `localStorage` o la implementación de filtros dinámicos, la IA eliminó la necesidad de buscar en StackOverflow, proporcionando soluciones integradas en mi propio contexto.
+**¿Dónde me ha ayudado más?**
+Sobre todo en la parte del LocalStorage y los filtros. Yo sabía qué quería hacer (que se guardaran los nombres y poder filtrar por actividad), pero la IA me dio la estructura rápido. También para poner los comentarios JSDoc, que es algo que se tarda mucho en escribir a mano.
 
-## ⚠️ Casos de fallo y código incorrecto
-No todo ha sido perfecto. He detectado casos donde la IA falló:
-* **Pérdida de contexto:** En varias ocasiones, la IA asumió que mi calculadora era de "alimentos y recetas" cuando en realidad era una calculadora matemática de Tasa Metabólica Basal (TMB). Esto generó sugerencias de campos irrelevantes (como "tipo de comida").
-* **Sobre-ingeniería:** A veces, al pedir una mejora simple, la IA proponía soluciones con librerías externas o estructuras excesivamente complejas para un proyecto de Vanilla JS.
-* **Corrección manual:** Tuve que intervenir para ajustar el diseño visual (CSS) cuando las sugerencias de la IA rompían la estética minimalista o el Modo Noche que ya habíamos definido.
+**¿Cuándo ha fallado?**
+Ha habido momentos desesperantes. A veces le pedía una cosa de la calculadora de TMB y empezaba a inventarse campos de comida o recetas porque se pensaba que era una app de nutrición completa. También con el CSS, a veces me cambiaba colores que ya me gustaban y me tocaba volver atrás. Al final, si no revisas cada línea que escribe, te mete código que ni usas o que ensucia el proyecto.
 
-## 🛡️ Riesgos de la dependencia excesiva
-Depender totalmente de la IA conlleva riesgos significativos que he podido identificar:
-* **Atrofia del pensamiento lógico:** Si dejamos que la IA resuelva cada problema, perdemos la capacidad de entender el "porqué" de las soluciones, lo que dificulta el debugging cuando algo sale realmente mal.
-* **Código "caja negra":** Es fácil aceptar código que funciona sin entender cómo lo hace, lo cual es un peligro para la seguridad y el mantenimiento a largo plazo.
-* **Homogeneización del diseño:** Si no se guía con criterio, la IA tiende a generar soluciones estándar, quitando originalidad y alma al proyecto.
+**Riesgos que veo:**
+El mayor peligro es volverse vago. Si dejas que la IA lo haga todo, el día que te pidan hacer un código en una pizarra en una entrevista (como dice el tutor Antonio), te quedas en blanco. Por eso, en la parte de las fórmulas de Harris-Benedict, preferí revisarlas bien y entender de dónde salía cada número.
 
-## 💻 Cuándo prefiero programar sin asistencia
-Prefiero programar sin IA en los siguientes escenarios:
-* **Lógica central del negocio:** Cuando estoy definiendo las fórmulas matemáticas base, prefiero escribirlas a mano para asegurar una comprensión total de los cálculos.
-* **Diseño visual detallado:** Para los ajustes finos de CSS y la experiencia de usuario (UX), prefiero mi propia intuición sobre lo que "se siente bien" al interactuar con la interfaz.
-* **Aprendizaje profundo:** Cuando quiero dominar una API nueva (como los Servidores MCP), prefiero leer la documentación primero antes de pedirle a la IA que lo implemente por mí.
-
-## Conclusión
-La IA es un multiplicador de productividad increíble, pero debe usarse como una herramienta guiada por un desarrollador con criterio. En ZenMacros, la IA hizo el "trabajo pesado", permitiéndome a mí centrarme en la experiencia del usuario y en la calidad final del producto.
+**Conclusión:**
+Me gusta programar con ayuda porque vas más rápido, pero prefiero hacerlo sin ella cuando quiero aprender de verdad cómo funciona algo nuevo. Para este proyecto ha sido una herramienta más, como el destornillador para la moto: te ayuda, pero el que sabe dónde apretar eres tú.

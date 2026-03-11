@@ -1,5 +1,3 @@
-// Proyecto TaskFlow con asistencia de IA
-
 /**
  * Historial de cálculos de calorías.
  * @type {Array<{
