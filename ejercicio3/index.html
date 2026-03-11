@@ -99,7 +99,20 @@
          </div>
         </form>
     </section>
-        <div id="lista-resultados" class="mt-6 w-full max-w-lg mx-auto space-y-4 px-4"></div>
+        <section class="mt-6 w-full max-w-lg mx-auto px-4 space-y-3">
+            <div class="flex items-center justify-between gap-3">
+                <label for="filtro-actividad" class="text-sm font-semibold text-purple-600 dark:text-purple-300">
+                    Filtrar por tipo de actividad
+                </label>
+                <select id="filtro-actividad" class="p-2 rounded-lg border text-sm dark:bg-slate-800 dark:text-white outline-none focus:border-purple-500">
+                    <option value="todas">Todas</option>
+                    <option value="1.2">Sedentario</option>
+                    <option value="1.375">Ligero</option>
+                    <option value="1.55">Moderado</option>
+                </select>
+            </div>
+            <div id="lista-resultados" class="w-full space-y-4"></div>
+        </section>
         </main>
          </div>
         <footer>

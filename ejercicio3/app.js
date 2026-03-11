@@ -2,7 +2,14 @@
 
 /**
  * Arreglo para almacenar el historial de cálculos de calorías.
- * @type {Array<{id: number, calorias: number, nombrePerfil?: string, diferenciaRespectoAnterior?: number}>}
+ * @type {Array<{
+ *   id: number,
+ *   calorias: number,
+ *   nombrePerfil?: string,
+ *   diferenciaRespectoAnterior?: number,
+ *   actividadValor?: string,
+ *   actividadEtiqueta?: string
+ * }>}
  */
 let historialCalorias = [];
 
@@ -17,6 +24,7 @@ const inputNombrePerfil = document.getElementById("nombre-perfil");
 const selectGenero = document.getElementById("genero");
 const selectActividad = document.getElementById("actividad");
 const contenedorResultados = document.getElementById("lista-resultados");
+const selectFiltroActividad = document.getElementById("filtro-actividad");
 
 /**
  * Valida los datos del formulario para asegurarse de que sean numéricamente válidos.
@@ -72,7 +80,14 @@ function calcularCaloriasMantenimiento(tmb, factorActividad) {
 
 /**
  * Renderiza una tarjeta de resultados en el DOM y añade los listeners para eliminación.
- * @param {{id: number, calorias: number, nombrePerfil?: string, diferenciaRespectoAnterior?: number}} registro 
+ * @param {{
+ *  id: number,
+ *  calorias: number,
+ *  nombrePerfil?: string,
+ *  diferenciaRespectoAnterior?: number,
+ *  actividadValor?: string,
+ *  actividadEtiqueta?: string
+ * }} registro 
  */
 function renderizarTarjetaResultado(registro) {
     const tarjeta = document.createElement("div");
@@ -108,6 +123,26 @@ function renderizarTarjetaResultado(registro) {
     });
 
     contenedorResultados.appendChild(tarjeta);
+}
+
+/**
+ * Renderiza todo el historial aplicando el filtro de actividad seleccionado.
+ */
+function renderizarHistorialFiltrado() {
+    if (!contenedorResultados) return;
+
+    const actividadSeleccionada = selectFiltroActividad ? selectFiltroActividad.value : "todas";
+    contenedorResultados.innerHTML = "";
+
+    historialCalorias.forEach((registro) => {
+        const coincideActividad =
+            actividadSeleccionada === "todas" ||
+            registro.actividadValor === actividadSeleccionada;
+
+        if (coincideActividad) {
+            renderizarTarjetaResultado(registro);
+        }
+    });
 }
 
 /**
@@ -155,6 +190,9 @@ botonCalcular.addEventListener("click", function () {
 
     const genero = selectGenero.value;
     const factorActividad = parseFloat(selectActividad.value);
+    const actividadValor = selectActividad.value;
+    const actividadEtiqueta =
+        selectActividad.options[selectActividad.selectedIndex]?.text || "";
 
     const tmb = calcularTMB(edad, peso, altura, genero);
     const caloriasMantenimiento = calcularCaloriasMantenimiento(tmb, factorActividad);
@@ -168,12 +206,14 @@ botonCalcular.addEventListener("click", function () {
         id: Date.now(),
         calorias: caloriasMantenimiento,
         nombrePerfil: nombrePerfilValor,
-        diferenciaRespectoAnterior
+        diferenciaRespectoAnterior,
+        actividadValor,
+        actividadEtiqueta
     };
 
     historialCalorias.push(nuevoRegistro);
     localStorage.setItem("misCalculos", JSON.stringify(historialCalorias));
-    renderizarTarjetaResultado(nuevoRegistro);
+    renderizarHistorialFiltrado();
     limpiarFormulario();
 });
 
@@ -184,10 +224,14 @@ function cargarHistorialDeLocalStorage() {
     const datosGuardados = localStorage.getItem("misCalculos");
     if (datosGuardados) {
         historialCalorias = JSON.parse(datosGuardados);
-        historialCalorias.forEach(registro => renderizarTarjetaResultado(registro));
+        renderizarHistorialFiltrado();
     }
 }
 cargarHistorialDeLocalStorage();
+
+if (selectFiltroActividad) {
+    selectFiltroActividad.addEventListener("change", renderizarHistorialFiltrado);
+}
 
 /**
  * Permite cambiar el modo oscuro/claro en la aplicación.
