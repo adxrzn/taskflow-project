@@ -1,7 +1,7 @@
 // Proyecto TaskFlow con asistencia de IA
 
 /**
- * Arreglo para almacenar el historial de cálculos de calorías.
+ * Historial de cálculos de calorías.
  * @type {Array<{
  *   id: number,
  *   calorias: number,
@@ -14,7 +14,7 @@
 let historialCalorias = [];
 
 /**
- * Obtiene referencias a los elementos del DOM relacionados con el formulario.
+ * Referencias a elementos del DOM utilizados en la interfaz.
  */
 const botonCalcular = document.getElementById("btn-calcular");
 const inputEdad = document.getElementById("edad");
@@ -28,11 +28,12 @@ const selectFiltroActividad = document.getElementById("filtro-actividad");
 const botonLimpiarTodo = document.getElementById("btn-limpiar-todo");
 
 /**
- * Valida los datos del formulario para asegurarse de que sean numéricamente válidos.
- * @param {number} edad 
- * @param {number} peso 
- * @param {number} altura 
- * @returns {string|null} Mensaje de error si hay fallo, o null si todo está bien
+ * Valida los datos recibidos del formulario para asegurar que son válidos y numéricos.
+ *
+ * @param {number|string} edad - Edad del perfil.
+ * @param {number|string} peso - Peso en kilogramos.
+ * @param {number|string} altura - Altura en centímetros.
+ * @returns {string|null} Mensaje de error si algo está mal, o null si pasa la validación.
  */
 function validarFormulario(edad, peso, altura) {
     if (
@@ -57,12 +58,13 @@ function validarFormulario(edad, peso, altura) {
 }
 
 /**
- * Calcula la Tasa Metabólica Basal (TMB) en base a los datos obtenidos.
- * @param {number} edad 
- * @param {number} peso 
- * @param {number} altura 
- * @param {string} genero 
- * @returns {number} TMB calculada
+ * Calcula la Tasa Metabólica Basal (TMB) según la fórmula de Harris-Benedict.
+ *
+ * @param {number} edad - Edad del perfil.
+ * @param {number} peso - Peso en kilogramos.
+ * @param {number} altura - Altura en centímetros.
+ * @param {string} genero - Género ("hombre" o "mujer").
+ * @returns {number} TMB calculada.
  */
 function calcularTMB(edad, peso, altura, genero) {
     let tmb = (10 * peso) + (6.25 * altura) - (5 * edad);
@@ -70,25 +72,27 @@ function calcularTMB(edad, peso, altura, genero) {
 }
 
 /**
- * Calcula las calorías de mantenimiento en función de la TMB y el factor de actividad.
- * @param {number} tmb 
- * @param {number} factorActividad 
- * @returns {number} Calorías de mantenimiento redondeadas
+ * Calcula las calorías de mantenimiento según la TMB y el factor de actividad.
+ *
+ * @param {number} tmb - Tasa Metabólica Basal.
+ * @param {number} factorActividad - Factor de actividad seleccionado.
+ * @returns {number} Calorías de mantenimiento redondeadas.
  */
 function calcularCaloriasMantenimiento(tmb, factorActividad) {
     return Math.round(tmb * factorActividad);
 }
 
 /**
- * Renderiza una tarjeta de resultados en el DOM y añade los listeners para eliminación.
- * @param {{
- *  id: number,
- *  calorias: number,
- *  nombrePerfil?: string,
- *  diferenciaRespectoAnterior?: number,
- *  actividadValor?: string,
- *  actividadEtiqueta?: string
- * }} registro 
+ * Renderiza una tarjeta individual con el resultado de un cálculo en el historial.
+ * Permite también borrar el registro correspondiente.
+ *
+ * @param {Object} registro - Registro de cálculo.
+ * @param {number} registro.id - Identificador único del registro.
+ * @param {number} registro.calorias - Calorías de mantenimiento.
+ * @param {string} [registro.nombrePerfil] - Nombre de perfil asociado.
+ * @param {number} [registro.diferenciaRespectoAnterior] - Diferencia respecto al valor anterior.
+ * @param {string} [registro.actividadValor] - Valor del tipo de actividad.
+ * @param {string} [registro.actividadEtiqueta] - Nombre del tipo de actividad.
  */
 function renderizarTarjetaResultado(registro) {
     const tarjeta = document.createElement("div");
@@ -127,7 +131,8 @@ function renderizarTarjetaResultado(registro) {
 }
 
 /**
- * Renderiza todo el historial aplicando el filtro de actividad seleccionado.
+ * Muestra el historial filtrado por tipo de actividad seleccionado.
+ * Si el filtro es "todas", muestra todos los registros.
  */
 function renderizarHistorialFiltrado() {
     if (!contenedorResultados) return;
@@ -147,9 +152,11 @@ function renderizarHistorialFiltrado() {
 }
 
 /**
- * Elimina una tarjeta de la UI y del historial (con actualización de LocalStorage).
- * @param {number} id 
- * @param {HTMLElement} tarjetaElemento 
+ * Elimina una tarjeta visual y el registro correspondiente del historial.
+ * Sincroniza el cambio en LocalStorage.
+ *
+ * @param {number} id - ID del registro a eliminar.
+ * @param {HTMLElement} tarjetaElemento - Elemento visual a eliminar.
  */
 function eliminarTarjetaDeHistorial(id, tarjetaElemento) {
     tarjetaElemento.remove();
@@ -158,7 +165,7 @@ function eliminarTarjetaDeHistorial(id, tarjetaElemento) {
 }
 
 /**
- * Limpia los campos de entrada del formulario.
+ * Limpia todos los campos del formulario de entrada.
  */
 function limpiarFormulario() {
     inputEdad.value = "";
@@ -170,7 +177,8 @@ function limpiarFormulario() {
 }
 
 /**
- * Evento click para calcular calorías, validar, guardar y mostrar el registro.
+ * Controlador del evento click para calcular calorías y guardar el resultado.
+ * Obtiene y valida los datos del formulario, calcula el resultado, lo almacena y actualiza la UI.
  */
 botonCalcular.addEventListener("click", function () {
     const edadValor = inputEdad.value.trim();
@@ -219,7 +227,7 @@ botonCalcular.addEventListener("click", function () {
 });
 
 /**
- * Carga el historial de registros guardados en LocalStorage y los renderiza al cargar la página.
+ * Carga y renderiza los cálculos previos almacenados en LocalStorage.
  */
 function cargarHistorialDeLocalStorage() {
     const datosGuardados = localStorage.getItem("misCalculos");
@@ -230,10 +238,17 @@ function cargarHistorialDeLocalStorage() {
 }
 cargarHistorialDeLocalStorage();
 
+/**
+ * Listener que renderiza el historial nuevamente al cambiar el filtro de actividad.
+ */
 if (selectFiltroActividad) {
     selectFiltroActividad.addEventListener("change", renderizarHistorialFiltrado);
 }
 
+/**
+ * Permite al usuario borrar todo el historial de cálculos, previa confirmación.
+ * Borra la información del array y de LocalStorage, limpiando también la UI.
+ */
 if (botonLimpiarTodo) {
     botonLimpiarTodo.addEventListener("click", function () {
         const confirmado = confirm("¿Seguro que quieres borrar todo el historial de cálculos? Esta acción no se puede deshacer.");
@@ -248,7 +263,7 @@ if (botonLimpiarTodo) {
 }
 
 /**
- * Permite cambiar el modo oscuro/claro en la aplicación.
+ * Permite alternar entre modo oscuro y modo claro en la aplicación.
  */
 document.getElementById('btn-dark').onclick = function () {
     document.documentElement.classList.toggle('dark');
