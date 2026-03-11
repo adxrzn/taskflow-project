@@ -1,3 +1,4 @@
+// Proyecto TaskFlow con asistencia de IA
 let historialCalculos = [];
 
 const boton = document.getElementById("btn-calcular");
