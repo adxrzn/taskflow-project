@@ -25,6 +25,7 @@ const selectGenero = document.getElementById("genero");
 const selectActividad = document.getElementById("actividad");
 const contenedorResultados = document.getElementById("lista-resultados");
 const selectFiltroActividad = document.getElementById("filtro-actividad");
+const botonLimpiarTodo = document.getElementById("btn-limpiar-todo");
 
 /**
  * Valida los datos del formulario para asegurarse de que sean numéricamente válidos.
@@ -231,6 +232,19 @@ cargarHistorialDeLocalStorage();
 
 if (selectFiltroActividad) {
     selectFiltroActividad.addEventListener("change", renderizarHistorialFiltrado);
+}
+
+if (botonLimpiarTodo) {
+    botonLimpiarTodo.addEventListener("click", function () {
+        const confirmado = confirm("¿Seguro que quieres borrar todo el historial de cálculos? Esta acción no se puede deshacer.");
+        if (!confirmado) return;
+
+        historialCalorias = [];
+        localStorage.removeItem("misCalculos");
+        if (contenedorResultados) {
+            contenedorResultados.innerHTML = "";
+        }
+    });
 }
 
 /**
