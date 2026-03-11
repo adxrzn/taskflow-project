@@ -4,13 +4,13 @@ Aquí documentaré cómo uso Cursor como IDE asistido por IA y los atajos que m�
 # Registro de flujo de trabajo en Cursor
 
 ## Exploración de la interfaz
-He abierto el proyecto TaskFlow en Cursor y he verificado que la IA tiene acceso a mis archivos de JavaScript y HTML. He probado el chat lateral (Ctrl+L) para entender mi lógica de la calculadora.
+He verificado el uso del chat lateral, la edición inline y el composer. La integración de la IA permite manipular el código sin salir del editor.
 
 ## Atajos de teclado frecuentes
-* **Ctrl + K**: Para editar líneas de código con IA.
-* **Ctrl + L**: Para abrir el chat lateral (el que he usado para la explicación del código).
-* **Ctrl + I**: Para usar el Composer.
+* **Ctrl + K**: Edición inline (la usé para rediseñar botones).
+* **Ctrl + L**: Chat contextual (lo usé para entender la lógica de la calculadora).
+* **Ctrl + I**: Composer (lo usé para añadir encabezados a múltiples archivos).
 
-## Ejemplos de mejora de código
-1. **Análisis de lógica**: He usado el chat para desglosar la función de cálculo de calorías, confirmando que la fórmula de Mifflin-St Jeor está bien aplicada.
-2. **Explicación técnica**: La IA me ha ayudado a visualizar cómo se guardan los datos en el `localStorage` de forma más clara.
+## Ejemplos de mejora
+1. **Comprensión de lógica**: El chat (`Ctrl + L`) me explicó detalladamente cómo se guardan los datos en el LocalStorage en mi `app.js`.
+2. **Productividad con estilos**: Con `Ctrl + K` apliqué clases de Tailwind complejas al instante, ahorrando tiempo de escritura manual.
