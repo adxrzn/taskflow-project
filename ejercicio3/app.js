@@ -2,7 +2,7 @@
 
 /**
  * Arreglo para almacenar el historial de cálculos de calorías.
- * @type {Array<{id: number, calorias: number}>}
+ * @type {Array<{id: number, calorias: number, nombrePerfil?: string}>}
  */
 let historialCalorias = [];
 
@@ -13,6 +13,7 @@ const botonCalcular = document.getElementById("btn-calcular");
 const inputEdad = document.getElementById("edad");
 const inputPeso = document.getElementById("peso");
 const inputAltura = document.getElementById("altura");
+const inputNombrePerfil = document.getElementById("nombre-perfil");
 const selectGenero = document.getElementById("genero");
 const selectActividad = document.getElementById("actividad");
 const contenedorResultados = document.getElementById("lista-resultados");
@@ -71,15 +72,16 @@ function calcularCaloriasMantenimiento(tmb, factorActividad) {
 
 /**
  * Renderiza una tarjeta de resultados en el DOM y añade los listeners para eliminación.
- * @param {{id: number, calorias: number}} registro 
+ * @param {{id: number, calorias: number, nombrePerfil?: string}} registro 
  */
 function renderizarTarjetaResultado(registro) {
     const tarjeta = document.createElement("div");
 
     tarjeta.className = "flex justify-between items-center p-4 my-2 rounded-xl bg-white dark:bg-slate-800 border dark:border-slate-700 shadow-sm transition-all";
     tarjeta.innerHTML = `
-        <div class="dark:text-white font-bold">
-            🔥 <span>${registro.calorias}</span> kcal
+        <div class="dark:text-white font-bold flex flex-col">
+            <span>🔥 <span>${registro.calorias}</span> kcal</span>
+            ${registro.nombrePerfil ? `<span class="mt-1 text-xs font-normal text-slate-500 dark:text-slate-300">👤 ${registro.nombrePerfil}</span>` : ""}
         </div>
         <button class="btn-borrar bg-red-500 hover:bg-red-600 text-white px-3 py-1.5 rounded-lg transition-colors text-xs font-bold uppercase">
             Eliminar
@@ -110,6 +112,9 @@ function limpiarFormulario() {
     inputEdad.value = "";
     inputPeso.value = "";
     inputAltura.value = "";
+    if (inputNombrePerfil) {
+        inputNombrePerfil.value = "";
+    }
 }
 
 /**
@@ -119,6 +124,7 @@ botonCalcular.addEventListener("click", function () {
     const edadValor = inputEdad.value.trim();
     const pesoValor = inputPeso.value.trim();
     const alturaValor = inputAltura.value.trim();
+    const nombrePerfilValor = inputNombrePerfil ? inputNombrePerfil.value.trim() : "";
 
     const edad = Number(edadValor);
     const peso = Number(pesoValor);
@@ -139,7 +145,8 @@ botonCalcular.addEventListener("click", function () {
 
     const nuevoRegistro = {
         id: Date.now(),
-        calorias: caloriasMantenimiento
+        calorias: caloriasMantenimiento,
+        nombrePerfil: nombrePerfilValor
     };
 
     historialCalorias.push(nuevoRegistro);
