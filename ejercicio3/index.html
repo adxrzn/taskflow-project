@@ -9,7 +9,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script>tailwind.config = { darkMode: 'class' }</script>
 </head>
-<body class="bg-[#efeeff] dark:bg-slate-900 text-slate-900 dark:text-slate-100 transition-colors duration-500 font-sans">
+<body class="min-h-screen bg-gradient-to-br from-[#22223b] via-[#3a3153] to-[#16151e] dark:from-[#120f2f] dark:via-[#1b1632] dark:to-[#22223b] text-slate-900 dark:text-slate-100 transition-colors duration-500 font-sans">
 <header class="flex flex-col items-center justify-center relative p-8 bg-white dark:bg-slate-800 border-b-2 border-purple-600 transition-colors">
     <button id="btn-dark" class="absolute top-4 left-4 p-2 bg-gray-200 dark:bg-slate-700 rounded-full shadow-lg text-xl z-50 hover:scale-110 transition-transform">
     🌙/☀️
@@ -19,7 +19,7 @@
         <span>👤 Mi Perfil</span>
     </div>
 </header>
-<div class="app-layout">
+<div class="app-layout flex flex-row">
 <aside class="w-[220px] bg-white dark:bg-slate-800 p-6 rounded-[15px] shadow-xl flex-shrink-0 text-center border dark:border-slate-700">
     <h3 class="font-bold text-purple-600 dark:text-purple-300 mb-4 text-lg">¡Sigue tu camino Zen!</h3>        
     <ul class="space-y-3">
@@ -35,7 +35,7 @@
     </ul>
 </aside>
 
-<main>
+<main class="flex flex-col items-center w-full">
     <h2>¿Por qué deberías elegirnos?</h2>
         <section class="tarjetas-container">
             <article class="bg-white dark:bg-slate-800 p-6 rounded-[55px] border-none shadow-[0_0_15px_5px_rgba(139,92,246,0.4)] text-center transition-all hover:-translate-y-2">
@@ -54,10 +54,10 @@
                 <p class="text-gray-700 dark:text-gray-200 font-medium">Calcula tu déficit o superávit calórico según tu nivel de actividad física diaria.</p>
             </article>
         </section>
-        <section class="mt-8 flex justify-center w-full px-4">
-        <form class="bg-white dark:bg-slate-800 p-8 rounded-3xl shadow-lg w-full max-w-lg border dark:border-slate-700 transition-all">
+        <section class="mt-16 flex justify-center w-full px-4">
+        <form class="bg-white dark:bg-gradient-to-br dark:from-[#312e81] dark:to-[#1e1b4b] p-8 rounded-3xl w-full max-w-lg border-[1.5px] border-purple-400 dark:border-purple-700 shadow-2xl shadow-purple-700/30 dark:shadow-purple-400/30 transition-all flex flex-col items-center">
         <h2 class="text-2xl font-bold text-center text-purple-600 dark:text-purple-400 mb-6 uppercase">Calcula tus calorías 🔥</h2>
-        <div class="space-y-4">
+        <div class="space-y-4 w-full">
             <div class="flex flex-col">
                 <label class="font-bold text-purple-600 dark:text-purple-300 text-sm mb-1">Edad</label>
                 <input type="number" id="edad" placeholder="Ej: 25" class="p-2 rounded-lg border dark:bg-slate-700 dark:text-white outline-none focus:border-purple-500">
@@ -88,7 +88,7 @@
                     <option value="1.55">Moderado (3-5 días/semana)</option>
                 </select>
             </div>
-            <button type="button" id="btn-calcular" class="w-full bg-gradient-to-r from-purple-500 via-pink-500 to-yellow-500 hover:from-purple-700 hover:via-pink-600 hover:to-yellow-600 text-white font-bold py-3 rounded-xl transition-all active:scale-95 shadow-md uppercase">
+            <button type="button" id="btn-calcular" class="w-full bg-gradient-to-r from-purple-500 via-pink-500 to-yellow-500 hover:from-purple-700 hover:via-pink-600 hover:to-yellow-600 text-white font-bold py-3 rounded-xl transition-all active:scale-95 shadow-lg shadow-purple-500/30 uppercase">
                 CALCULAR
             </button>
          </div>
