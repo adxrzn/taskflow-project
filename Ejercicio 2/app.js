@@ -1,18 +1,10 @@
 /**
  * Historial de cálculos de calorías.
- * @type {Array<{
- *   id: number,
- *   calorias: number,
- *   nombrePerfil?: string,
- *   diferenciaRespectoAnterior?: number,
- *   actividadValor?: string,
- *   actividadEtiqueta?: string
- * }>}
  */
 let historialCalorias = [];
 
 /**
- * Referencias a elementos del DOM utilizados en la interfaz.
+ * Referencias a elementos del DOM.
  */
 const botonCalcular = document.getElementById("btn-calcular");
 const inputEdad = document.getElementById("edad");
@@ -24,88 +16,32 @@ const selectActividad = document.getElementById("actividad");
 const contenedorResultados = document.getElementById("lista-resultados");
 const selectFiltroActividad = document.getElementById("filtro-actividad");
 const botonLimpiarTodo = document.getElementById("btn-limpiar-todo");
+const seccionExtras = document.getElementById("seccion-extras");
 
 /**
- * Valida los datos recibidos del formulario para asegurar que son válidos y numéricos.
- *
- * @param {number|string} edad - Edad del perfil.
- * @param {number|string} peso - Peso en kilogramos.
- * @param {number|string} altura - Altura en centímetros.
- * @returns {string|null} Mensaje de error si algo está mal, o null si pasa la validación.
+ * Valida los datos del formulario.
  */
 function validarFormulario(edad, peso, altura) {
-    if (
-        edad === "" || peso === "" || altura === "" ||
-        isNaN(edad) || isNaN(peso) || isNaN(altura)
-    ) {
+    if (edad === "" || peso === "" || altura === "" || isNaN(edad) || isNaN(peso) || isNaN(altura)) {
         return "Te falta algún dato para seguir tu camino Zen.";
     }
-    if (
-        Number(edad) < 3 || Number(edad) > 95 ||
-        Number(peso) < 30 || Number(peso) > 200 ||
-        Number(altura) < 115 || Number(altura) > 210
-    ) {
+    const e = Number(edad), p = Number(peso), a = Number(altura);
+    if (e < 3 || e > 95 || p < 30 || p > 200 || a < 115 || a > 210) {
         return "Introduce datos reales, por favor. ¡Sé un verdadero Zen!";
-    }
-    if (
-        Number(edad) < 0 || Number(peso) < 0 || Number(altura) < 0
-    ) {
-        return "No se permiten valores negativos.";
     }
     return null;
 }
 
 /**
- * Calcula la Tasa Metabólica Basal (TMB) según la fórmula de Harris-Benedict.
- *
- * @param {number} edad - Edad del perfil.
- * @param {number} peso - Peso en kilogramos.
- * @param {number} altura - Altura en centímetros.
- * @param {string} genero - Género ("hombre" o "mujer").
- * @returns {number} TMB calculada.
+ * Crea el elemento HTML de la tarjeta.
  */
-function calcularTMB(edad, peso, altura, genero) {
-    let tmb = (10 * peso) + (6.25 * altura) - (5 * edad);
-    return (genero === "hombre") ? tmb + 5 : tmb - 161;
-}
-
-/**
- * Calcula las calorías de mantenimiento según la TMB y el factor de actividad.
- *
- * @param {number} tmb - Tasa Metabólica Basal.
- * @param {number} factorActividad - Factor de actividad seleccionado.
- * @returns {number} Calorías de mantenimiento redondeadas.
- */
-function calcularCaloriasMantenimiento(tmb, factorActividad) {
-    return Math.round(tmb * factorActividad);
-}
-
-/**
- * Renderiza una tarjeta individual con el resultado de un cálculo en el historial.
- * Permite también borrar el registro correspondiente.
- *
- * @param {Object} registro - Registro de cálculo.
- * @param {number} registro.id - Identificador único del registro.
- * @param {number} registro.calorias - Calorías de mantenimiento.
- * @param {string} [registro.nombrePerfil] - Nombre de perfil asociado.
- * @param {number} [registro.diferenciaRespectoAnterior] - Diferencia respecto al valor anterior.
- * @param {string} [registro.actividadValor] - Valor del tipo de actividad.
- * @param {string} [registro.actividadEtiqueta] - Nombre del tipo de actividad.
- */
-function renderizarTarjetaResultado(registro) {
+function crearTarjetaHTML(registro) {
     const tarjeta = document.createElement("div");
+    tarjeta.className = "flex justify-between items-center gap-4 p-4 my-2 rounded-xl bg-white dark:bg-slate-800 border dark:border-slate-700 shadow-sm transition-all animate-fade-in";
 
-    tarjeta.className = "flex justify-between items-center gap-4 p-4 my-2 rounded-xl bg-white dark:bg-slate-800 border dark:border-slate-700 shadow-sm transition-all";
-
-    let textoDiferencia = "—";
-    if (typeof registro.diferenciaRespectoAnterior === "number") {
-        if (registro.diferenciaRespectoAnterior > 0) {
-            textoDiferencia = `+${registro.diferenciaRespectoAnterior} kcal`;
-        } else if (registro.diferenciaRespectoAnterior < 0) {
-            textoDiferencia = `${registro.diferenciaRespectoAnterior} kcal`;
-        } else {
-            textoDiferencia = "0 kcal";
-        }
+    let textoDif = "—";
+    if (registro.diferenciaRespectoAnterior !== null) {
+        textoDif = registro.diferenciaRespectoAnterior > 0 ? `+${registro.diferenciaRespectoAnterior} kcal` : `${registro.diferenciaRespectoAnterior} kcal`;
     }
 
     tarjeta.innerHTML = `
@@ -114,155 +50,94 @@ function renderizarTarjetaResultado(registro) {
             ${registro.nombrePerfil ? `<span class="mt-1 text-xs font-normal text-slate-500 dark:text-slate-300">👤 ${registro.nombrePerfil}</span>` : ""}
         </div>
         <div class="w-32 text-xs text-right text-slate-600 dark:text-slate-300">
-            <span class="font-semibold">↕ ${textoDiferencia}</span><br>
+            <span class="font-semibold">↕ ${textoDif}</span><br>
             <span class="text-[0.7rem]">vs. último registro</span>
         </div>
-        <button class="btn-borrar bg-red-500 hover:bg-red-600 text-white px-3 py-1.5 rounded-lg transition-colors text-xs font-bold uppercase">
-            Eliminar
-        </button>
+        <button class="btn-borrar bg-red-500 hover:bg-red-600 text-white px-3 py-1.5 rounded-lg transition-colors text-xs font-bold uppercase">Borrar</button>
     `;
-    tarjeta.querySelector(".btn-borrar").addEventListener("click", function () {
-        eliminarTarjetaDeHistorial(registro.id, tarjeta);
-    });
 
-    contenedorResultados.appendChild(tarjeta);
+    tarjeta.querySelector(".btn-borrar").onclick = () => {
+        tarjeta.remove();
+        historialCalorias = historialCalorias.filter(item => item.id !== registro.id);
+        localStorage.setItem("misCalculos", JSON.stringify(historialCalorias));
+        if (historialCalorias.length === 0) seccionExtras.classList.add('hidden');
+    };
+
+    return tarjeta;
 }
 
 /**
- * Muestra el historial filtrado por tipo de actividad seleccionado.
- * Si el filtro es "todas", muestra todos los registros.
+ * Renderiza el historial. 
+ * Recorremos el array y usamos PREPEND para que el último del array (el más nuevo) 
+ * quede el primero en el HTML.
  */
 function renderizarHistorialFiltrado() {
     if (!contenedorResultados) return;
-
-    const actividadSeleccionada = selectFiltroActividad ? selectFiltroActividad.value : "todas";
+    const filtro = selectFiltroActividad ? selectFiltroActividad.value : "todas";
     contenedorResultados.innerHTML = "";
 
-    historialCalorias.forEach((registro) => {
-        const coincideActividad =
-            actividadSeleccionada === "todas" ||
-            registro.actividadValor === actividadSeleccionada;
-
-        if (coincideActividad) {
-            renderizarTarjetaResultado(registro);
+    historialCalorias.forEach(reg => {
+        if (filtro === "todas" || reg.actividadValor === filtro) {
+            const tarjeta = crearTarjetaHTML(reg);
+            contenedorResultados.prepend(tarjeta); // Lo pone arriba
         }
     });
-}
 
-/**
- * Elimina una tarjeta visual y el registro correspondiente del historial.
- * Sincroniza el cambio en LocalStorage.
- *
- * @param {number} id - ID del registro a eliminar.
- * @param {HTMLElement} tarjetaElemento - Elemento visual a eliminar.
- */
-function eliminarTarjetaDeHistorial(id, tarjetaElemento) {
-    tarjetaElemento.remove();
-    historialCalorias = historialCalorias.filter(item => item.id !== id);
-    localStorage.setItem("misCalculos", JSON.stringify(historialCalorias));
-}
-
-/**
- * Limpia todos los campos del formulario de entrada.
- */
-function limpiarFormulario() {
-    inputEdad.value = "";
-    inputPeso.value = "";
-    inputAltura.value = "";
-    if (inputNombrePerfil) {
-        inputNombrePerfil.value = "";
+    if (seccionExtras) {
+        historialCalorias.length > 0 ? seccionExtras.classList.remove('hidden') : seccionExtras.classList.add('hidden');
     }
 }
 
-/**
- * Controlador del evento click para calcular calorías y guardar el resultado.
- * Obtiene y valida los datos del formulario, calcula el resultado, lo almacena y actualiza la UI.
- */
-botonCalcular.addEventListener("click", function () {
-    const edadValor = inputEdad.value.trim();
-    const pesoValor = inputPeso.value.trim();
-    const alturaValor = inputAltura.value.trim();
-    const nombrePerfilValor = inputNombrePerfil ? inputNombrePerfil.value.trim() : "";
+botonCalcular.addEventListener("click", () => {
+    const edadV = inputEdad.value.trim();
+    const pesoV = inputPeso.value.trim();
+    const alturaV = inputAltura.value.trim();
+    
+    const error = validarFormulario(edadV, pesoV, alturaV);
+    if (error) return alert(error);
 
-    const edad = Number(edadValor);
-    const peso = Number(pesoValor);
-    const altura = Number(alturaValor);
+    const tmb = (10 * Number(pesoV)) + (6.25 * Number(alturaV)) - (5 * Number(edadV));
+    const finalTmb = selectGenero.value === "hombre" ? tmb + 5 : tmb - 161;
+    const cals = Math.round(finalTmb * parseFloat(selectActividad.value));
+    
+    const ultimo = historialCalorias[historialCalorias.length - 1] || null;
 
-    const mensajeError = validarFormulario(edadValor, pesoValor, alturaValor);
-
-    if (mensajeError) {
-        alert(mensajeError);
-        return;
-    }
-
-    const genero = selectGenero.value;
-    const factorActividad = parseFloat(selectActividad.value);
-    const actividadValor = selectActividad.value;
-    const actividadEtiqueta =
-        selectActividad.options[selectActividad.selectedIndex]?.text || "";
-
-    const tmb = calcularTMB(edad, peso, altura, genero);
-    const caloriasMantenimiento = calcularCaloriasMantenimiento(tmb, factorActividad);
-
-    const ultimoRegistro = historialCalorias[historialCalorias.length - 1] || null;
-    const diferenciaRespectoAnterior = ultimoRegistro
-        ? caloriasMantenimiento - ultimoRegistro.calorias
-        : null;
-
-    const nuevoRegistro = {
+    const nuevo = {
         id: Date.now(),
-        calorias: caloriasMantenimiento,
-        nombrePerfil: nombrePerfilValor,
-        diferenciaRespectoAnterior,
-        actividadValor,
-        actividadEtiqueta
+        calorias: cals,
+        nombrePerfil: inputNombrePerfil.value.trim(),
+        diferenciaRespectoAnterior: ultimo ? cals - ultimo.calorias : null,
+        actividadValor: selectActividad.value
     };
 
-    historialCalorias.push(nuevoRegistro);
+    historialCalorias.push(nuevo);
     localStorage.setItem("misCalculos", JSON.stringify(historialCalorias));
+    
     renderizarHistorialFiltrado();
-    limpiarFormulario();
+    
+    // Limpiar inputs
+    inputEdad.value = ""; inputPeso.value = ""; inputAltura.value = ""; inputNombrePerfil.value = "";
 });
 
-/**
- * Carga y renderiza los cálculos previos almacenados en LocalStorage.
- */
-function cargarHistorialDeLocalStorage() {
-    const datosGuardados = localStorage.getItem("misCalculos");
-    if (datosGuardados) {
-        historialCalorias = JSON.parse(datosGuardados);
+// Carga inicial
+(function() {
+    const datos = localStorage.getItem("misCalculos");
+    if (datos) {
+        historialCalorias = JSON.parse(datos);
         renderizarHistorialFiltrado();
     }
-}
-cargarHistorialDeLocalStorage();
+})();
 
-/**
- * Listener que renderiza el historial nuevamente al cambiar el filtro de actividad.
- */
-if (selectFiltroActividad) {
-    selectFiltroActividad.addEventListener("change", renderizarHistorialFiltrado);
-}
+if (selectFiltroActividad) selectFiltroActividad.onchange = renderizarHistorialFiltrado;
 
-/**
- * Permite al usuario borrar todo el historial de cálculos, previa confirmación.
- * Borra la información del array y de LocalStorage, limpiando también la UI.
- */
 if (botonLimpiarTodo) {
-    botonLimpiarTodo.addEventListener("click", function () {
-        const confirmado = confirm("¿Seguro que quieres borrar todo el historial de cálculos? Esta acción no se puede deshacer.");
-        if (!confirmado) return;
-
+    botonLimpiarTodo.onclick = () => {
+        if (!confirm("¿Borrar todo el historial?")) return;
         historialCalorias = [];
         localStorage.removeItem("misCalculos");
-        if (contenedorResultados) {
-            contenedorResultados.innerHTML = "";
-        }
-    });
+        contenedorResultados.innerHTML = "";
+        seccionExtras.classList.add('hidden');
+    };
 }
 
-/**
- * Permite alternar entre modo oscuro y modo claro en la aplicación.
- */
-document.getElementById('btn-dark').onclick = function () {
-    document.documentElement.classList.toggle('dark');
-};
+document.getElementById('btn-dark').onclick = () => document.documentElement.classList.toggle('dark');
