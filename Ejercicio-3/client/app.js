@@ -1,3 +1,4 @@
+const API_URL = '/api/v1/tasks';
 function mostrarFeedback(mensaje, tipo = 'info') {
     const contenedor = document.getElementById('feedback-sistema') || document.createElement('div');
     contenedor.id = 'feedback-sistema';
