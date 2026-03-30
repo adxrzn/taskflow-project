@@ -1,7 +1,11 @@
 {
   "version": 2,
   "builds": [
-    { "src": "Ejercicio 3/server/src/index.js", "use": "@vercel/node" },
+    {
+      "src": "Ejercicio 3/server/src/index.js",
+      "use": "@vercel/node",
+      "config": { "includeFiles": ["Ejercicio 3/server/package.json"] }
+    },
     { "src": "index.html", "use": "@vercel/static" },
     { "src": "style.css", "use": "@vercel/static" },
     { "src": "Ejercicio 1/**", "use": "@vercel/static" },
@@ -10,6 +14,6 @@
   ],
   "rewrites": [
     { "source": "/api/(.*)", "destination": "/Ejercicio 3/server/src/index.js" },
-    { "source": "/ejercicio3/(.*)", "destination": "/Ejercicio 3/client/$1" }
+    { "source": "/", "destination": "/index.html" }
   ]
 }
