@@ -10,6 +10,7 @@
   ],
   "rewrites": [
     { "source": "/api/(.*)", "destination": "/Ejercicio 3/server/src/index.js" },
-    { "source": "/Ejercicio 3/(.*)", "destination": "/Ejercicio 3/client/$1" }
+    { "source": "/Ejercicio-3/(.*)", "destination": "/Ejercicio 3/client/$1" },
+    { "source": "/", "destination": "/index.html" }
   ]
 }
