@@ -1,0 +1,9 @@
+{
+  "name": "taskflow-ejercicio3",
+  "version": "1.0.0",
+  "description": "Fase 3 del proyecto TaskFlow: Rediseño con Tailwind CSS y modo oscuro",
+  "main": "app.js",
+  "dependencies": {
+    "tailwindcss": "^3.4.1"
+  }
+}
