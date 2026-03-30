@@ -45,7 +45,7 @@ app.use((err, req, res, next) => {
     });
 });
 
-const PORT = env.PORT || 3000;
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-    console.log(`✅ Servidor escuchando en: http://localhost:${PORT}`);
+    console.log(`✅ Servidor funcionando en el puerto: ${PORT}`);
 });
