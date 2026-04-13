@@ -1,11 +1,7 @@
-/**
- * Historial de cálculos de calorías.
- */
+const URL_API = 'https://tu-proyecto-vercel.vercel.app/api/v1/tasks';
+
 let historialCalorias = [];
 
-/**
- * Referencias a elementos del DOM.
- */
 const botonCalcular = document.getElementById("btn-calcular");
 const inputEdad = document.getElementById("edad");
 const inputPeso = document.getElementById("peso");
@@ -18,9 +14,6 @@ const selectFiltroActividad = document.getElementById("filtro-actividad");
 const botonLimpiarTodo = document.getElementById("btn-limpiar-todo");
 const seccionExtras = document.getElementById("seccion-extras");
 
-/**
- * Valida los datos del formulario.
- */
 function validarFormulario(edad, peso, altura) {
     if (edad === "" || peso === "" || altura === "" || isNaN(edad) || isNaN(peso) || isNaN(altura)) {
         return "Te falta algún dato para seguir tu camino Zen.";
@@ -32,9 +25,16 @@ function validarFormulario(edad, peso, altura) {
     return null;
 }
 
-/**
- * Crea el elemento HTML de la tarjeta.
- */
+function cargarDesdeServidor() {
+    fetch(URL_API)
+        .then(res => res.json())
+        .then(datos => {
+            historialCalorias = datos;
+            renderizarHistorialFiltrado();
+        })
+        .catch(err => console.log("Error al cargar:", err));
+}
+
 function crearTarjetaHTML(registro) {
     const tarjeta = document.createElement("div");
     tarjeta.className = "flex justify-between items-center gap-4 p-4 my-2 rounded-xl bg-white dark:bg-slate-800 border dark:border-slate-700 shadow-sm transition-all animate-fade-in";
@@ -59,18 +59,12 @@ function crearTarjetaHTML(registro) {
     tarjeta.querySelector(".btn-borrar").onclick = () => {
         tarjeta.remove();
         historialCalorias = historialCalorias.filter(item => item.id !== registro.id);
-        localStorage.setItem("misCalculos", JSON.stringify(historialCalorias));
         if (historialCalorias.length === 0) seccionExtras.classList.add('hidden');
     };
 
     return tarjeta;
 }
 
-/**
- * Renderiza el historial. 
- * Recorremos el array y usamos PREPEND para que el último del array (el más nuevo) 
- * quede el primero en el HTML.
- */
 function renderizarHistorialFiltrado() {
     if (!contenedorResultados) return;
     const filtro = selectFiltroActividad ? selectFiltroActividad.value : "todas";
@@ -79,7 +73,7 @@ function renderizarHistorialFiltrado() {
     historialCalorias.forEach(reg => {
         if (filtro === "todas" || reg.actividadValor === filtro) {
             const tarjeta = crearTarjetaHTML(reg);
-            contenedorResultados.prepend(tarjeta); // Lo pone arriba
+            contenedorResultados.prepend(tarjeta);
         }
     });
 
@@ -103,30 +97,26 @@ botonCalcular.addEventListener("click", () => {
     const ultimo = historialCalorias[historialCalorias.length - 1] || null;
 
     const nuevo = {
-        id: Date.now(),
+        titulo: inputNombrePerfil.value.trim() || "Cálculo Zen",
         calorias: cals,
         nombrePerfil: inputNombrePerfil.value.trim(),
         diferenciaRespectoAnterior: ultimo ? cals - ultimo.calorias : null,
         actividadValor: selectActividad.value
     };
 
-    historialCalorias.push(nuevo);
-    localStorage.setItem("misCalculos", JSON.stringify(historialCalorias));
-    
-    renderizarHistorialFiltrado();
-    
-    // Limpiar inputs
-    inputEdad.value = ""; inputPeso.value = ""; inputAltura.value = ""; inputNombrePerfil.value = "";
+    fetch(URL_API, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(nuevo)
+    })
+    .then(res => res.json())
+    .then(() => {
+        cargarDesdeServidor();
+        inputEdad.value = ""; inputPeso.value = ""; inputAltura.value = ""; inputNombrePerfil.value = "";
+    });
 });
 
-// Carga inicial
-(function() {
-    const datos = localStorage.getItem("misCalculos");
-    if (datos) {
-        historialCalorias = JSON.parse(datos);
-        renderizarHistorialFiltrado();
-    }
-})();
+cargarDesdeServidor();
 
 if (selectFiltroActividad) selectFiltroActividad.onchange = renderizarHistorialFiltrado;
 
@@ -134,7 +124,6 @@ if (botonLimpiarTodo) {
     botonLimpiarTodo.onclick = () => {
         if (!confirm("¿Borrar todo el historial?")) return;
         historialCalorias = [];
-        localStorage.removeItem("misCalculos");
         contenedorResultados.innerHTML = "";
         seccionExtras.classList.add('hidden');
     };
