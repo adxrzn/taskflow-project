@@ -1,4 +1,4 @@
-const URL_API = 'https://taskflow-project-zeta.vercel.app/api/v1/tasks';
+const URL_API = window.location.origin + '/api/v1/tasks';
 
 let historialCalorias = [];
 
